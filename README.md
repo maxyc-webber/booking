@@ -17,6 +17,7 @@ Simple Symfony application for booking desks in a coworking space. It runs in Do
 5. Run database migrations
 6. Open the site in your browser
 
+
 ### Build the Docker image
 
 ```bash
@@ -29,6 +30,7 @@ docker build -t booking-app .
 docker-compose up -d
 ```
 
+
 Copy `.env.example` to `.env.local` and adjust the values:
 
 ```bash
@@ -36,6 +38,7 @@ cp .env.example .env.local
 ```
 
 Edit `.env.local` to match your database credentials and mailer settings. At a minimum set `DATABASE_URL` (e.g. `mysql://user:pass@db:3306/booking`) and, if email sending is required, `MAILER_DSN`.
+
 
 ### Run migrations
 
