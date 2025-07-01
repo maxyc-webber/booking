@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Desks{% endblock %}
+
+{% block body %}
+<h1>Available Desks</h1>
+{% for desk in desks %}
+    <h2>{{ desk.name }}</h2>
+    <form action="{{ path('booking_create_form') }}" method="post">
+        <input type="hidden" name="desk_id" value="{{ desk.id }}">
+        <label>User</label>
+        <input type="text" name="user" required>
+        <label>Start</label>
+        <input type="datetime-local" name="start_time" required>
+        <label>End</label>
+        <input type="datetime-local" name="end_time" required>
+        <button type="submit">Book</button>
+    </form>
+{% endfor %}
+<p><a href="{{ path('booking_list') }}">View bookings</a></p>
+{% endblock %}
