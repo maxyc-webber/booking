@@ -9,6 +9,7 @@
         <th>ID</th>
         <th>Desk</th>
         <th>User</th>
+        <th>Phone</th>
         <th>Start</th>
         <th>End</th>
     </tr>
@@ -17,12 +18,13 @@
             <td>{{ booking.id }}</td>
             <td>{{ booking.desk.name }}</td>
             <td>{{ booking.user }}</td>
+            <td>{{ booking.phone }}</td>
             <td>{{ booking.startTime|date('Y-m-d H:i') }}</td>
             <td>{{ booking.endTime|date('Y-m-d H:i') }}</td>
         </tr>
     {% else %}
         <tr>
-            <td colspan="5">No bookings</td>
+            <td colspan="6">No bookings</td>
         </tr>
     {% endfor %}
 </table>

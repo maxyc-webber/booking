@@ -3,19 +3,79 @@
 {% block title %}Desks{% endblock %}
 
 {% block body %}
-<h1>Available Desks</h1>
-{% for desk in desks %}
-    <h2>{{ desk.name }}</h2>
-    <form action="{{ path('booking_create_form') }}" method="post">
-        <input type="hidden" name="desk_id" value="{{ desk.id }}">
-        <label>User</label>
-        <input type="text" name="user" required>
-        <label>Start</label>
-        <input type="datetime-local" name="start_time" required>
-        <label>End</label>
-        <input type="datetime-local" name="end_time" required>
-        <button type="submit">Book</button>
+<div class="container mt-4">
+    <h1>Desks</h1>
+    {% for msg in app.flashes('success') %}
+        <div class="alert alert-success">{{ msg }}</div>
+    {% endfor %}
+    {% for msg in app.flashes('error') %}
+        <div class="alert alert-danger">{{ msg }}</div>
+    {% endfor %}
+    <table class="table" id="desk-table">
+        <thead><tr><th>Desk</th><th>Status</th><th></th></tr></thead>
+        <tbody>
+        {% for item in desks %}
+            {% set desk = item.entity %}
+            <tr data-desk-id="{{ desk.id }}">
+                <td>{{ desk.name }}</td>
+                <td class="status">{% if item.occupied %}Booked{% else %}Free{% endif %}</td>
+                <td>
+                    <button type="button" class="btn btn-primary book-btn" data-desk="{{ desk.id }}" data-desk-name="{{ desk.name }}" {% if item.occupied %}disabled{% endif %}>Book</button>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="modal fade" id="bookingModal" tabindex="-1">
+  <div class="modal-dialog">
+    <form class="modal-content" method="post" action="{{ path('booking_create_form') }}">
+        <div class="modal-header">
+            <h5 class="modal-title">Book desk</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <input type="hidden" name="desk_id" id="desk_id">
+            <input type="hidden" name="_token" value="{{ csrf_token('booking') }}">
+            <div class="mb-3">
+                <label class="form-label">Name</label>
+                <input type="text" name="user" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Phone</label>
+                <input type="text" name="phone" class="form-control" required>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Book</button>
+        </div>
     </form>
-{% endfor %}
-<p><a href="{{ path('booking_list') }}">View bookings</a></p>
+  </div>
+</div>
+
+<script>
+    document.querySelectorAll('.book-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.getElementById('desk_id').value = btn.dataset.desk;
+            const modal = new bootstrap.Modal(document.getElementById('bookingModal'));
+            modal.show();
+        });
+    });
+
+    function refresh() {
+        fetch('{{ path('desk_list') }}')
+            .then(r => r.json())
+            .then(data => {
+                data.forEach(item => {
+                    const row = document.querySelector('tr[data-desk-id="'+item.id+'"]');
+                    if (!row) return;
+                    row.querySelector('.status').textContent = item.occupied ? 'Booked' : 'Free';
+                    const btn = row.querySelector('.book-btn');
+                    btn.disabled = item.occupied;
+                });
+            });
+    }
+    setInterval(refresh, 5000);
+</script>
 {% endblock %}

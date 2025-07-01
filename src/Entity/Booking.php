@@ -20,6 +20,9 @@ class Booking
     #[ORM\Column(length: 255)]
     private string $user = '';
 
+    #[ORM\Column(length: 50)]
+    private string $phone = '';
+
     #[ORM\Column(type: 'datetime')]
     private \DateTimeInterface $startTime;
 
@@ -50,6 +53,17 @@ class Booking
     public function setUser(string $user): self
     {
         $this->user = $user;
+        return $this;
+    }
+
+    public function getPhone(): string
+    {
+        return $this->phone;
+    }
+
+    public function setPhone(string $phone): self
+    {
+        $this->phone = $phone;
         return $this;
     }
 
