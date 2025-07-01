@@ -11,11 +11,18 @@ use Symfony\Component\Routing\Annotation\Route;
 class DefaultController extends AbstractController
 {
     #[Route('/', name: 'home')]
-    public function index(DeskRepository $deskRepository): Response
+    public function index(DeskRepository $deskRepository, BookingRepository $bookingRepository): Response
     {
         $desks = $deskRepository->findAll();
+        $deskData = [];
+        foreach ($desks as $desk) {
+            $deskData[] = [
+                'entity' => $desk,
+                'occupied' => $bookingRepository->findActiveForDesk($desk) !== null,
+            ];
+        }
         return $this->render('desks/index.html.twig', [
-            'desks' => $desks,
+            'desks' => $deskData,
         ]);
     }
 
