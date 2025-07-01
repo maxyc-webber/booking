@@ -11,10 +11,12 @@ Simple Symfony application for booking desks in a coworking space. It runs in Do
 ## Setup
 
 1. Clone this repository
-2. Build the Docker image
-3. Start the containers using Docker Compose
-4. Run database migrations
-5. Open the site in your browser
+2. Install PHP dependencies with `composer install`
+3. Build the Docker image
+4. Start the containers using Docker Compose
+5. Run database migrations
+6. Open the site in your browser
+
 
 ### Build the Docker image
 
@@ -28,7 +30,15 @@ docker build -t booking-app .
 docker-compose up -d
 ```
 
-Set database credentials in a `.env.local` file or export variables `DB_DATABASE`, `DB_USERNAME` and `DB_PASSWORD` before running the containers.
+
+Copy `.env.example` to `.env.local` and adjust the values:
+
+```bash
+cp .env.example .env.local
+```
+
+Edit `.env.local` to match your database credentials and mailer settings. At a minimum set `DATABASE_URL` (e.g. `mysql://user:pass@db:3306/booking`) and, if email sending is required, `MAILER_DSN`.
+
 
 ### Run migrations
 
