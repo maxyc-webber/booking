@@ -1,6 +1,6 @@
 # Booking
 
-A simple PHP application demonstrating a containerized environment using PHP 8 and MySQL. The project uses Docker to make setup and deployment easy.
+Simple Symfony application for booking desks in a coworking space. It runs in Docker and uses MySQL for storage.
 
 ## Requirements
 
@@ -13,7 +13,8 @@ A simple PHP application demonstrating a containerized environment using PHP 8 a
 1. Clone this repository
 2. Build the Docker image
 3. Start the containers using Docker Compose
-4. Open the site in your browser
+4. Run database migrations
+5. Open the site in your browser
 
 ### Build the Docker image
 
@@ -25,6 +26,14 @@ docker build -t booking-app .
 
 ```bash
 docker-compose up -d
+```
+
+Set database credentials in a `.env.local` file or export variables `DB_DATABASE`, `DB_USERNAME` and `DB_PASSWORD` before running the containers.
+
+### Run migrations
+
+```
+docker-compose exec app php bin/console doctrine:migrations:migrate
 ```
 
 ### Access the site
