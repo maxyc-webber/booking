@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Bookings{% endblock %}
+
+{% block body %}
+<h1>Bookings</h1>
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Desk</th>
+        <th>User</th>
+        <th>Start</th>
+        <th>End</th>
+    </tr>
+    {% for booking in bookings %}
+        <tr>
+            <td>{{ booking.id }}</td>
+            <td>{{ booking.desk.name }}</td>
+            <td>{{ booking.user }}</td>
+            <td>{{ booking.startTime|date('Y-m-d H:i') }}</td>
+            <td>{{ booking.endTime|date('Y-m-d H:i') }}</td>
+        </tr>
+    {% else %}
+        <tr>
+            <td colspan="5">No bookings</td>
+        </tr>
+    {% endfor %}
+</table>
+<p><a href="{{ path('home') }}">Back to desks</a></p>
+{% endblock %}
